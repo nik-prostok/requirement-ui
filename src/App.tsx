@@ -1,26 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import * as React from 'react';
+import {createMuiTheme} from "@material-ui/core";
+import { ThemeProvider } from '@material-ui/styles';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+import {RootRouter} from './components/RootRouter';
+
+const theme = createMuiTheme({
+    palette: {
+        primary: {
+            light: '#238f80',
+            main: '#007569',
+            dark: '#005b4f',
+            contrastText: '#ffffff',
+        },
+        secondary: {
+            light: '#ff8a50',
+            main: '#ff5722',
+            dark: '#c41c00',
+            contrastText: '#fafafa',
+        },
+    },
+});
+
+const App = () => (
+    <ThemeProvider theme={theme}>
+        <RootRouter/>
+    </ThemeProvider>
+)
 
 export default App;
