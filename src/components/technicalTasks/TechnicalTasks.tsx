@@ -2,7 +2,7 @@ import * as React from "react";
 
 import {Button, Typography} from "@material-ui/core";
 
-export const AddObject = () => {
+export const TechnicalTasks = () => {
     return (
         <>
             <Button variant="contained" color="primary">

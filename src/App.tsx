@@ -1,8 +1,8 @@
 import * as React from 'react';
 import {createMuiTheme} from "@material-ui/core";
-import { ThemeProvider } from '@material-ui/styles';
+import {ThemeProvider} from '@material-ui/styles';
 
-import {RootRouter} from './components/RootRouter';
+import {RootRouter} from './components/router/RootRouter';
 
 const theme = createMuiTheme({
     palette: {
