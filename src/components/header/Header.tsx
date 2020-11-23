@@ -6,15 +6,13 @@ import {
     IconButton,
     Typography,
     Toolbar,
-    CssBaseline, InputBase, Button,
+    CssBaseline, InputBase, Button, Box,
 } from "@material-ui/core";
 import MenuIcon from '@material-ui/icons/Menu';
 import {useState} from "react";
 import {LeftMenu} from "./LeftMenu/LeftMenu";
 import {useStyles} from "./Header.styles";
 import {SelectObject} from "./SelectObject/SelectObject";
-
-import SearchIcon from '@material-ui/icons/Search';
 
 export interface HeaderProps {
 };
@@ -51,11 +49,11 @@ export const Header: React.FunctionComponent<HeaderProps> = ({children}) => {
                 >
                     <MenuIcon/>
                 </IconButton>
-                <Typography variant="h6">
+
+                <Typography className={classes.title} variant="h6">
                     Система управления требованиями
                 </Typography>
                 <SelectObject/>
-                <Button color="inherit">Login</Button>
             </Toolbar>
         </AppBar>
     )

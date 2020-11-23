@@ -36,5 +36,9 @@ export const useStyles = makeStyles((theme: Theme) =>
             padding: theme.spacing(0, 1),
             ...theme.mixins.toolbar,
         },
+        routerLink: {
+            color: 'inherit',
+            textDecoration: 'none'
+        }
     }),
 );

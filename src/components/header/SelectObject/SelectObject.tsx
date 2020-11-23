@@ -1,7 +1,7 @@
 import * as React from "react";
 import {useState} from "react";
 
-import {Box, createStyles, fade, FormControl, InputLabel, MenuItem, Paper, Select, Theme} from "@material-ui/core";
+import {createStyles, fade, FormControl, MenuItem, Paper, Select, Theme} from "@material-ui/core";
 
 import {TargetObject} from "./interfaces/ObjectsList";
 import {makeStyles} from "@material-ui/core/styles";

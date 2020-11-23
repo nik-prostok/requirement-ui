@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Link} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 
 import clsx from 'clsx';
 import {
@@ -34,7 +34,7 @@ export const LeftMenu = ({isOpenMenu = false, handleMenuClose}: LeftMenuProps) =
         if (menuItems.length) {
             return (<List>
                 {menuItems.map((menuItem, index) => (
-                    <Link to={menuItem.path} key={index}>
+                    <NavLink className={classes.routerLink} to={menuItem.path} key={index}>
                         <ListItem button>
                             <ListItemIcon>
                                 {React.createElement(menuItem.icon)}
@@ -42,7 +42,7 @@ export const LeftMenu = ({isOpenMenu = false, handleMenuClose}: LeftMenuProps) =
                             <ListItemText primary={menuItem.label}/>
                         </ListItem>
                         <Divider/>
-                    </Link>
+                    </NavLink>
                 ))}
             </List>)
         }
