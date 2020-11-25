@@ -6,7 +6,7 @@ import {
     IconButton,
     Typography,
     Toolbar,
-    CssBaseline, InputBase, Button, Box,
+    CssBaseline
 } from "@material-ui/core";
 import MenuIcon from '@material-ui/icons/Menu';
 import {useState} from "react";
