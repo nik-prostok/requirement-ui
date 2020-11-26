@@ -1,8 +1,10 @@
 import * as React from 'react';
 import {createMuiTheme} from "@material-ui/core";
 import {ThemeProvider} from '@material-ui/styles';
+import {Provider} from "react-redux";
 
 import {RootRouter} from './components/router/RootRouter';
+import store from './store';
 
 const theme = createMuiTheme({
     palette: {
@@ -22,9 +24,11 @@ const theme = createMuiTheme({
 });
 
 const App = () => (
-    <ThemeProvider theme={theme}>
-        <RootRouter/>
-    </ThemeProvider>
+    <Provider store={store}>
+        <ThemeProvider theme={theme}>
+            <RootRouter/>
+        </ThemeProvider>
+    </Provider>
 )
 
 export default App;

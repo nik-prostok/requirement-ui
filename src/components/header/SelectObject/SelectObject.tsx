@@ -1,10 +1,13 @@
 import * as React from "react";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 import {createStyles, fade, FormControl, MenuItem, Paper, Select, Theme} from "@material-ui/core";
 
 import {makeStyles} from "@material-ui/core/styles";
 import {TargetObject} from "./interfaces/TargetObject";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "../../../store/modules/combineReducers";
+import {setTargetObject} from "../../../store/modules/targetObjects/TargetObjects.action";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -28,16 +31,20 @@ export const SelectObject = () => {
 
     const classes = useStyles();
 
-    const [idSelectedObject, setIdSelectedObject] = useState<string>('');
-    const [listObjects, setListObjects] = useState<TargetObject[]>([
-        {
+    const targetObjects = useSelector((state: RootState) => state.targetObject.targetObjects)
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(setTargetObject([{
             id: '123',
             officialName: 'Стрелка'
         }, {
             id: '456',
             officialName: 'Белка'
-        }
-    ]);
+        }]))
+    }, [])
+
+    const [idSelectedObject, setIdSelectedObject] = useState<string>('');
 
     const handleOnSelectObject = (event: React.ChangeEvent<{ value: unknown }>) => {
         setIdSelectedObject(event.target.value as string);
@@ -55,7 +62,7 @@ export const SelectObject = () => {
                     <MenuItem disabled value='' >
                         Объект
                     </MenuItem>
-                    {listObjects.map(targetObject => (
+                    {targetObjects.map(targetObject => (
                         <MenuItem key={targetObject.id} value={targetObject.id}>
                             {targetObject.officialName}
                         </MenuItem>
