@@ -1,13 +1,15 @@
 import * as React from "react";
 import {useEffect, useState} from "react";
 
-import {createStyles, fade, FormControl, MenuItem, Paper, Select, Theme} from "@material-ui/core";
-
+import {CircularProgress, createStyles, fade, FormControl, MenuItem, Paper, Select, Theme} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
-import {TargetObject} from "./interfaces/TargetObject";
 import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../../../store/modules/combineReducers";
-import {setTargetObject} from "../../../store/modules/targetObjects/TargetObjects.action";
+
+import {
+    fetchTargetObject,
+    setSelectedTargetObjectById
+} from "../../../store/modules/targetObjects/TargetObjects.action";
+import {RootState} from "../../../store/createStore";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -23,7 +25,9 @@ const useStyles = makeStyles((theme: Theme) =>
         selectEmpty: {
             marginTop: theme.spacing(2),
         },
-
+        loader: {
+            color: theme.palette.secondary.light
+        }
     }),
 );
 
@@ -31,44 +35,49 @@ export const SelectObject = () => {
 
     const classes = useStyles();
 
-    const targetObjects = useSelector((state: RootState) => state.targetObject.targetObjects)
+    const {targetObjects, isLoading} = useSelector((state: RootState) => {
+        return {
+            targetObjects: state.targetObjects.targetObjects.targetObjectsList,
+            isLoading: state.targetObjects.targetObjects.isFetching
+        }
+    })
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(setTargetObject([{
-            id: '123',
-            officialName: 'Стрелка'
-        }, {
-            id: '456',
-            officialName: 'Белка'
-        }]))
+        dispatch(fetchTargetObject())
     }, [])
 
     const [idSelectedObject, setIdSelectedObject] = useState<string>('');
 
     const handleOnSelectObject = (event: React.ChangeEvent<{ value: unknown }>) => {
-        setIdSelectedObject(event.target.value as string);
+        const selectedObjectId: string = event.target.value as string;
+        setIdSelectedObject(selectedObjectId);
+        dispatch(setSelectedTargetObjectById(selectedObjectId))
     }
 
     return (
-        <Paper style={{margin: '10px'}}>
-            <FormControl className={classes.formControl}>
-                <Select
-                    displayEmpty
-                    inputProps={{ 'aria-label': 'Without label' }}
-                    value={idSelectedObject}
-                    onChange={handleOnSelectObject}
-                >
-                    <MenuItem disabled value='' >
-                        Объект
-                    </MenuItem>
-                    {targetObjects.map(targetObject => (
-                        <MenuItem key={targetObject.id} value={targetObject.id}>
-                            {targetObject.officialName}
+        <>
+            {isLoading && <CircularProgress className={classes.loader}/>}
+            <Paper style={{margin: '10px'}}>
+                <FormControl className={classes.formControl}>
+                    <Select
+                        disabled={isLoading}
+                        displayEmpty
+                        inputProps={{'aria-label': 'Without label'}}
+                        value={idSelectedObject}
+                        onChange={handleOnSelectObject}
+                    >
+                        <MenuItem disabled value=''>
+                            Объект
                         </MenuItem>
-                    ))}
-                </Select>
-            </FormControl>
-        </Paper>
+                        {targetObjects.map(targetObject => (
+                            <MenuItem key={targetObject.id} value={targetObject.id}>
+                                {targetObject.officialName}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+            </Paper>
+        </>
     )
 }
