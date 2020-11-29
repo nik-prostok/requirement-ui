@@ -1,6 +1,7 @@
-import {TargetObject} from "../../../components/header/SelectObject/interfaces/TargetObject";
+import {TargetObject} from "./interfaces/TargetObject";
 import {ThunkAction, ThunkDispatch} from "redux-thunk";
 import {AnyAction} from "redux";
+import {TargetObjectsApi} from "./TargetObjects.api";
 
 export interface SetTargetObjectsAction {
     type: 'SET_TARGET_OBJECTS';
@@ -36,9 +37,16 @@ export const setSelectedTargetObjectById = (idSelectedTargetObject: string): Set
 }
 
 export const fetchTargetObject = (): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
+
+    return async dispatch => {
+        dispatch(isFetching(true));
+        const targetobjectsList = await TargetObjectsApi.getTargetObjects();
+        dispatch(setTargetObject(targetobjectsList));
+        dispatch(isFetching(false));
+    }
     // Invoke API
-    return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
-        return new Promise<void>((resolve) => {
+    /*return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
+        return new Promise<void>(async (resolve) => {
             dispatch(isFetching(true))
             console.log('Login in progress')
             // Fake async process
@@ -58,5 +66,5 @@ export const fetchTargetObject = (): ThunkAction<Promise<void>, {}, {}, AnyActio
                 }, 1000)
             }, 3000)
         })
-    }
+    }*/
 }

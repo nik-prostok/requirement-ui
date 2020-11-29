@@ -1,4 +1,4 @@
-import {TargetObject} from "../../../components/header/SelectObject/interfaces/TargetObject";
+import {TargetObject} from "./interfaces/TargetObject";
 import {combineReducers} from "redux";
 import {
     SetSelectedTargetObjectByIdAction,
