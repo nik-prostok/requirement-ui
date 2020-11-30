@@ -5,7 +5,17 @@ import {useSelector} from "react-redux";
 import {TechTask} from "./interfaces/TechTaskList.interface";
 import {RootState} from "../../../store/createStore";
 import {TechTaskListApi} from "./api/TechTasksList.api";
-import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@material-ui/core";
+import {
+    CircularProgress, Grid,
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow, Typography
+} from "@material-ui/core";
+import WarningIcon from "@material-ui/icons/Warning";
 
 export const TechTasksList = () => {
 
@@ -32,15 +42,15 @@ export const TechTasksList = () => {
     }
 
     useEffect(() => {
-        fetchTechTasksList();
+        if (selectedTargetObjectId) fetchTechTasksList();
     }, [selectedTargetObjectId])
 
-    return (
+    const renderTable = () => (
         <TableContainer component={Paper}>
             <Table>
                 <TableHead>
                     <TableRow>
-                        <TableCell >Название ТЗ</TableCell>
+                        <TableCell>Название ТЗ</TableCell>
                         <TableCell align="right">ID</TableCell>
                     </TableRow>
                 </TableHead>
@@ -56,5 +66,30 @@ export const TechTasksList = () => {
                 </TableBody>
             </Table>
         </TableContainer>
+    )
+
+    const renderStatusMessage = () => {
+        if (!selectedTargetObjectId || isLoading || isError) return (
+            <Paper style={{padding: '40px'}}>
+                <Grid
+                    container
+                    direction="row"
+                    justify="center"
+                    alignItems="center"
+                >
+                    {!selectedTargetObjectId &&
+                    <Typography variant={'h6'}>Для просмотра ТЗ, выберите объект</Typography>}
+                    {isLoading && <CircularProgress size={50}/>}
+                    {isError && <WarningIcon fontSize={"large"} color={'error'}/>}
+                </Grid>
+            </Paper>)
+        return null;
+    }
+
+    return (
+        <>
+            {renderTable()}
+            {renderStatusMessage()}
+        </>
     )
 }
