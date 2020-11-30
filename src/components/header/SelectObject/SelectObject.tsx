@@ -63,12 +63,11 @@ export const SelectObject = () => {
                     <Select
                         disabled={isLoading}
                         displayEmpty
-                        inputProps={{'aria-label': 'Without label'}}
                         value={idSelectedObject}
                         onChange={handleOnSelectObject}
                     >
                         <MenuItem disabled value=''>
-                            Объект
+                            Выберите объект
                         </MenuItem>
                         {targetObjects.map(targetObject => (
                             <MenuItem key={targetObject.id} value={targetObject.id}>

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {NavLink} from "react-router-dom";
+import {NavLink, useHistory} from "react-router-dom";
 
 import clsx from 'clsx';
 import {
@@ -17,6 +17,9 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 
 import {useStyles} from "./LeftMenu.styles";
 import {menuItems} from "../../../utils/constants/menu";
+import {useSelector} from "react-redux";
+import {RootState} from "../../../store/createStore";
+import {useEffect, useState} from "react";
 
 export const DRAWER_WIDTH = 240;
 
@@ -29,20 +32,31 @@ export const LeftMenu = ({isOpenMenu = false, handleMenuClose}: LeftMenuProps) =
 
     const classes = useStyles();
     const theme = useTheme();
+    const history = useHistory();
+
+    const [selectedMenuPath, setSelectedMenuPath] = useState<string>(history.location.pathname);
+
+    useEffect(() => {
+        console.log(history.location.pathname);
+    }, [])
+
+    const isSetPath = (path: string) => path === history.location.pathname;
+
+    const onClickItem = (selectedPath: string) => {
+        setSelectedMenuPath(selectedPath);
+        history.push(selectedPath)
+    }
 
     const listDrawerItems = () => {
         if (menuItems.length) {
             return (<List>
                 {menuItems.map((menuItem, index) => (
-                    <NavLink className={classes.routerLink} to={menuItem.path} key={index}>
-                        <ListItem button>
-                            <ListItemIcon>
-                                {React.createElement(menuItem.icon)}
-                            </ListItemIcon>
-                            <ListItemText primary={menuItem.label}/>
-                        </ListItem>
-                        <Divider/>
-                    </NavLink>
+                    <ListItem button selected={isSetPath(menuItem.path)} onClick={() => onClickItem(menuItem.path)}>
+                        <ListItemIcon>
+                            {React.createElement(menuItem.icon)}
+                        </ListItemIcon>
+                        <ListItemText primary={menuItem.label}/>
+                    </ListItem>
                 ))}
             </List>)
         }

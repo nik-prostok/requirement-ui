@@ -44,27 +44,4 @@ export const fetchTargetObject = (): ThunkAction<Promise<void>, {}, {}, AnyActio
         dispatch(setTargetObject(targetobjectsList));
         dispatch(isFetching(false));
     }
-    // Invoke API
-    /*return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
-        return new Promise<void>(async (resolve) => {
-            dispatch(isFetching(true))
-            console.log('Login in progress')
-            // Fake async process
-            setTimeout(() => {
-                // set
-                dispatch(setTargetObject([{
-                    officialName: '123',
-                    id: '456'
-                }, {
-                    officialName: '6576',
-                    id: '0909'
-                }]))
-                setTimeout(() => {
-                    dispatch(isFetching(false))
-                    console.log('Fetch done')
-                    resolve()
-                }, 1000)
-            }, 3000)
-        })
-    }*/
 }
