@@ -50,8 +50,10 @@ export const TechTasksList = () => {
             <Table>
                 <TableHead>
                     <TableRow>
-                        <TableCell>Название ТЗ</TableCell>
-                        <TableCell align="right">ID</TableCell>
+                        <TableCell>
+                            <b>Название ТЗ</b>
+                        </TableCell>
+                        <TableCell align="right"><b>ID</b></TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
