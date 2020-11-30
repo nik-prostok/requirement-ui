@@ -17,8 +17,6 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 
 import {useStyles} from "./LeftMenu.styles";
 import {menuItems} from "../../../utils/constants/menu";
-import {useSelector} from "react-redux";
-import {RootState} from "../../../store/createStore";
 import {useEffect, useState} from "react";
 
 export const DRAWER_WIDTH = 240;
