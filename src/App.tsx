@@ -3,7 +3,7 @@ import {unstable_createMuiStrictModeTheme as createMuiTheme} from "@material-ui/
 import {ThemeProvider} from '@material-ui/styles';
 import {Provider} from "react-redux";
 
-import {RootRouter} from './components/router/RootRouter';
+import {RootRouter} from './router/RootRouter';
 import store from './store';
 
 const theme = createMuiTheme({

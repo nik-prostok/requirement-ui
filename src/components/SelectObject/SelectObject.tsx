@@ -8,8 +8,8 @@ import {useDispatch, useSelector} from "react-redux";
 import {
     fetchTargetObject,
     setSelectedTargetObjectById
-} from "../../../store/modules/targetObjects/TargetObjects.action";
-import {RootState} from "../../../store/createStore";
+} from "../../store/modules/targetObjects/TargetObjects.action";
+import {RootState} from "../../store/createStore";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

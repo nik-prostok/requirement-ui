@@ -1,5 +1,5 @@
-import {axiosInstance} from "../../../api/api";
-import {TargetObjectsResponse} from "./interfaces/TargetObject";
+import {axiosInstance} from "../../../../api/api";
+import {TargetObjectsResponse} from "../interfaces/TargetObject";
 
 export const TargetObjectsApi = {
     getTargetObjects() {

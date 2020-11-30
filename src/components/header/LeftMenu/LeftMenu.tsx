@@ -49,7 +49,7 @@ export const LeftMenu = ({isOpenMenu = false, handleMenuClose}: LeftMenuProps) =
         if (menuItems.length) {
             return (<List>
                 {menuItems.map((menuItem, index) => (
-                    <ListItem button selected={isSetPath(menuItem.path)} onClick={() => onClickItem(menuItem.path)}>
+                    <ListItem key={menuItem.path} button selected={isSetPath(menuItem.path)} onClick={() => onClickItem(menuItem.path)}>
                         <ListItemIcon>
                             {React.createElement(menuItem.icon)}
                         </ListItemIcon>

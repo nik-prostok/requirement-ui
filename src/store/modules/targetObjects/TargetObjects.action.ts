@@ -1,7 +1,7 @@
 import {TargetObject} from "./interfaces/TargetObject";
 import {ThunkAction, ThunkDispatch} from "redux-thunk";
 import {AnyAction} from "redux";
-import {TargetObjectsApi} from "./TargetObjects.api";
+import {TargetObjectsApi} from "./api/TargetObjects.api";
 
 export interface SetTargetObjectsAction {
     type: 'SET_TARGET_OBJECTS';

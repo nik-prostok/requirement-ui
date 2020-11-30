@@ -6,16 +6,16 @@ import {
     Redirect
 } from "react-router-dom";
 
-import {TechnicalTasks} from "../technicalTasks/TechnicalTasks";
-import {TechnicalTaskPoints} from "../technicalTaskPoints/TechnicalTaskPoints";
-import {Header} from "../header/Header";
+import {TechTasks} from "../components/techTasks/TechTasks";
+import {TechnicalTaskPoints} from "../components/technicalTaskPoints/TechnicalTaskPoints";
+import {Header} from "../components/header/Header";
 
 export const RootRouter = () => {
     return (
         <BrowserRouter>
             <Header>
                 <Switch>
-                    <Route path='/technicalTasks' component={TechnicalTasks}/>
+                    <Route path='/technicalTasks' component={TechTasks}/>
                     <Route path='/taskPoint' component={TechnicalTaskPoints}/>
                 </Switch>
             </Header>

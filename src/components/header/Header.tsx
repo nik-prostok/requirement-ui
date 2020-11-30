@@ -12,7 +12,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import {useState} from "react";
 import {LeftMenu} from "./LeftMenu/LeftMenu";
 import {useStyles} from "./Header.styles";
-import {SelectObject} from "./SelectObject/SelectObject";
+import {SelectObject} from "../SelectObject/SelectObject";
 
 export interface HeaderProps {
 };
