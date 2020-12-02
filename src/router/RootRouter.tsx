@@ -3,12 +3,11 @@ import {
     BrowserRouter,
     Switch,
     Route,
-    Redirect
 } from "react-router-dom";
 
-import {TechTasks} from "../components/techTasks/TechTasks";
-import {TechnicalTaskPoints} from "../components/technicalTaskPoints/TechnicalTaskPoints";
-import {Header} from "../components/header/Header";
+import {TechTasks} from "../components/TechTasks/TechTasks";
+import {Header} from "../components/Header/Header";
+import {TechPoints} from "../components/TechPoints/TechPoints";
 
 export const RootRouter = () => {
     return (
@@ -16,7 +15,7 @@ export const RootRouter = () => {
             <Header>
                 <Switch>
                     <Route path='/technicalTasks' component={TechTasks}/>
-                    <Route path='/taskPoint' component={TechnicalTaskPoints}/>
+                    <Route path='/techPoints' component={TechPoints}/>
                 </Switch>
             </Header>
         </BrowserRouter>

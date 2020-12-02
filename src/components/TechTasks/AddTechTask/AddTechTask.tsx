@@ -18,9 +18,9 @@ import {
 import DoneAllIcon from '@material-ui/icons/DoneAll';
 import WarningIcon from '@material-ui/icons/Warning';
 import SaveIcon from "@material-ui/icons/Save";
-import {AddTechTaskApi} from "./api/AddTechTask.api";
 import {useSelector} from "react-redux";
 import {RootState} from "../../../store/createStore";
+import {AddTechTaskApi} from "./api/AddTechTask.api";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -43,7 +43,11 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export const AddTechTask = () => {
+export interface AddTechTaskProps {
+    onAddTechTask?: () => void;
+}
+
+export const AddTechTask = ({onAddTechTask}:AddTechTaskProps) => {
 
     const classes = useStyles();
 
@@ -97,12 +101,16 @@ export const AddTechTask = () => {
             bodyFormData.append('objectId', selectedTargetObjectId);
             bodyFormData.append('name', nameTechTask);
             bodyFormData.append('file', acceptedFiles[0]);
-            const response = await AddTechTaskApi.getTargetObjects(bodyFormData);
+            await AddTechTaskApi.getTargetObjects(bodyFormData);
             setIsSuccessLoaded(true);
         } catch {
             setIsError(true);
+        } finally {
+            if (onAddTechTask) {
+                onAddTechTask();
+            }
+            setIsLoading(false);
         }
-        setIsLoading(false);
     }
 
     return (

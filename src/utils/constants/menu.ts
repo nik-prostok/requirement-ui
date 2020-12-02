@@ -7,6 +7,6 @@ export const menuItems = [{
     icon: AssignmentIcon,
 },{
     label: 'Пункты ТЗ',
-    path: '/taskPoint',
+    path: '/techPoints',
     icon: FormatListNumberedIcon,
 }]
