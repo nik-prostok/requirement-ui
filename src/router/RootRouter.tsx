@@ -3,6 +3,7 @@ import {
     BrowserRouter,
     Switch,
     Route,
+    Redirect,
 } from "react-router-dom";
 
 import {TechTasks} from "../components/TechTasks/TechTasks";
@@ -16,6 +17,7 @@ export const RootRouter = () => {
                 <Switch>
                     <Route path='/technicalTasks' component={TechTasks}/>
                     <Route path='/techPoints' component={TechPoints}/>
+                    <Redirect to={'/technicalTasks'}/>
                 </Switch>
             </Header>
         </BrowserRouter>

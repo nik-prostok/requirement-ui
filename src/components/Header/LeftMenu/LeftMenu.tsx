@@ -34,10 +34,6 @@ export const LeftMenu = ({isOpenMenu = false, handleMenuClose}: LeftMenuProps) =
 
     const [selectedMenuPath, setSelectedMenuPath] = useState<string>(history.location.pathname);
 
-    useEffect(() => {
-        console.log(history.location.pathname);
-    }, [])
-
     const isSetPath = (path: string) => path === history.location.pathname;
 
     const onClickItem = (selectedPath: string) => {
