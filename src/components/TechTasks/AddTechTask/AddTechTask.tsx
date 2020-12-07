@@ -101,7 +101,7 @@ export const AddTechTask = ({onAddTechTask}:AddTechTaskProps) => {
             bodyFormData.append('objectId', selectedTargetObjectId);
             bodyFormData.append('name', nameTechTask);
             bodyFormData.append('file', acceptedFiles[0]);
-            await AddTechTaskApi.getTargetObjects(bodyFormData);
+            await AddTechTaskApi.addTechTask(bodyFormData);
             setIsSuccessLoaded(true);
         } catch {
             setIsError(true);

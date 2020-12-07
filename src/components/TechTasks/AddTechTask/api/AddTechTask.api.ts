@@ -1,7 +1,7 @@
 import {axiosInstance} from "../../../../api/api";
 
 export const AddTechTaskApi = {
-    getTargetObjects(bodyFormData: FormData) {
+    addTechTask(bodyFormData: FormData) {
         return axiosInstance('/technicalTask', {
             method: 'post',
             data: bodyFormData,

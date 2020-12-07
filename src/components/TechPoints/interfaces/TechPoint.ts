@@ -1,4 +1,4 @@
-export type scaledCoordinates = {
+export type ScaledCoordinates = {
     x1: number;
     y1: number;
 
@@ -10,7 +10,7 @@ export type scaledCoordinates = {
 };
 
 export type Position = {
-    boundingRect: scaledCoordinates;
+    boundingRect: ScaledCoordinates;
     pageNumber: number;
 }
 
