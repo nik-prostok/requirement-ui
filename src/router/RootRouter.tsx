@@ -9,6 +9,7 @@ import {
 import {TechTasks} from "../components/TechTasks/TechTasks";
 import {Header} from "../components/Header/Header";
 import {TechPoints} from "../components/TechPoints/TechPoints";
+import {GenerateAct} from "../components/GenerateAct/GenerateAct";
 
 export const RootRouter = () => {
     return (
@@ -17,6 +18,7 @@ export const RootRouter = () => {
                 <Switch>
                     <Route path='/technicalTasks' component={TechTasks}/>
                     <Route path='/techPoints' component={TechPoints}/>
+                    <Route path='/generateAct' component={GenerateAct}/>
                     <Redirect to={'/technicalTasks'}/>
                 </Switch>
             </Header>

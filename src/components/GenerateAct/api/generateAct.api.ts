@@ -1,4 +1,4 @@
-import {axiosInstance} from "../../../../api/api";
+import {axiosInstance} from "../../../api/api";
 
 export const GenerateActApi = {
     generateAct(pimId: number, subsystemId: number) {

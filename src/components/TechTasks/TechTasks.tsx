@@ -13,7 +13,7 @@ import {AddTechTask} from "./AddTechTask/AddTechTask";
 import {TechTasksList} from "./ListTechTask/TechTaskList";
 import {TechTask} from "./ListTechTask/interfaces/TechTaskList.interface";
 import {TechTaskListApi} from "./ListTechTask/api/TechTasksList.api";
-import {GenerateAct} from "./GenerateAct/GenerateAct";
+import {GenerateAct} from "../GenerateAct/GenerateAct";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({}));
 
@@ -52,14 +52,11 @@ export const TechTasks = () => {
 
     return (
         <Grid container spacing={2}>
-            <Grid item xs={5}>
+            <Grid item xs={3}>
                 <AddTechTask onAddTechTask={onAddTechTask}/>
             </Grid>
-            <Grid item xs={7}>
-                <TechTasksList techTasksList={techTasksList} isErrorRender={isError} isLoadingRender={isLoading}/>
-            </Grid>
             <Grid item xs={5}>
-                <GenerateAct/>
+                <TechTasksList techTasksList={techTasksList} isErrorRender={isError} isLoadingRender={isLoading}/>
             </Grid>
         </Grid>
     )

@@ -16,18 +16,18 @@ import WarningIcon from "@material-ui/icons/Warning";
 import DoneAllIcon from "@material-ui/icons/DoneAll";
 import {makeStyles} from "@material-ui/core/styles";
 
-import {Pim} from "../../../framework/Pims/interfaces/pims";
-import {PimsApi} from "../../../framework/Pims/api/getPims.api";
+import {Pim} from "../../framework/Pims/interfaces/pims";
+import {PimsApi} from "../../framework/Pims/api/getPims.api";
 import {useSelector} from "react-redux";
-import {RootState} from "../../../store/createStore";
-import {Subsystem} from "../../../framework/Subsystems/interfaces/subsystems";
-import {SubsystemApi} from "../../../framework/Subsystems/api/getSubsystems.api";
+import {RootState} from "../../store/createStore";
+import {Subsystem} from "../../framework/Subsystems/interfaces/subsystems";
+import {SubsystemApi} from "../../framework/Subsystems/api/getSubsystems.api";
 
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         formControl: {
-            minWidth: 200,
+            minWidth: 240,
         },
         selectEmpty: {
             marginTop: theme.spacing(2),
@@ -63,8 +63,12 @@ export const GenerateAct = () => {
     };
 
     useEffect(() => {
-        fetchPims();
-        fetchSubsystems();
+        setSelectedPimId(0);
+        setSubsystemId(0);
+        if (selectedTargetObjectId) {
+            fetchPims();
+            fetchSubsystems();
+        }
     }, [selectedTargetObjectId])
 
     const fetchPims = async () => {
@@ -89,10 +93,6 @@ export const GenerateAct = () => {
         } finally {
             setIsLoading(false);
         }
-    }
-
-    const onGenerateTask = () => {
-
     }
 
     const renderGenerateForm = () => (
@@ -161,10 +161,14 @@ export const GenerateAct = () => {
     )
 
     return (
-        <Card>
-            <CardContent>
-                {selectedTargetObjectId ? renderGenerateForm() : renderEmptyForm()}
-            </CardContent>
-        </Card>
+        <Grid container spacing={2}>
+            <Grid item xs={3}>
+                <Card>
+                    <CardContent>
+                        {selectedTargetObjectId ? renderGenerateForm() : renderEmptyForm()}
+                    </CardContent>
+                </Card>
+            </Grid>
+        </Grid>
     )
 }
