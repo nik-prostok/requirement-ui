@@ -9,14 +9,15 @@ export type ScaledCoordinates = {
     height: number;
 };
 
-export type Position = {
-    boundingRect: ScaledCoordinates;
+export type PositionHighLight = {
+    rects: ScaledCoordinates[];
     pageNumber: number;
+    boundingRect: ScaledCoordinates;
 }
 
 export type TechPoint = {
     id: number;
-    position: Position;
+    position: PositionHighLight;
     description: string;
     name: string;
 }

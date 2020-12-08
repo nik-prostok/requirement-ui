@@ -1,23 +1,12 @@
 import {axiosInstance} from "../../../api/api";
-import {Pims} from "../../../framework/Pims/interfaces/pims";
-import {TechPointRes} from "../interfaces/TechPoint";
+import {PositionHighLight, TechPointRes} from "../interfaces/TechPoint";
 
 export interface AddTechPointReq {
     name: string;
     description: string;
     technicalTaskSystemId: number;
     modes: number[];
-    position: {
-        boundingRect: {
-            x1: number;
-            x2: number;
-            y1: number;
-            y2: number;
-            width: number;
-            height: number;
-        },
-        pageNumber: number;
-    }
+    position: PositionHighLight;
 }
 
 export const TechPointApi = {

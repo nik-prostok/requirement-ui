@@ -12,8 +12,8 @@ import {
 } from "react-pdf-highlighter";
 import {useEffect, useState} from "react";
 import {
-    Box,
-    CircularProgress,
+    Box, Button,
+    CircularProgress, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
     Theme,
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
@@ -25,6 +25,10 @@ import {RootState} from "../../store/createStore";
 import {AddTechPointReq, TechPointApi} from "./api/TechPoint.api";
 
 setPdfWorker(PDFWorker);
+
+export interface HighlightPopupProps {
+    techPoint: TechPoint;
+}
 
 const useStyles = makeStyles((theme: Theme) => ({
     arrow: {
@@ -41,6 +45,7 @@ export const TechPoints = () => {
 
     const [docURL, setDocURL] = useState<string>('/technicalTask/download?technicalTaskId=152');
     const [techTaskPoints, setTechTaskPoints] = useState<TechPoint[]>([]);
+    const [selectedHighlight, setSelectedHighlight] = useState<number>();
 
     const {selectedTargetObjectId} = useSelector((state: RootState) => {
         return {
@@ -57,12 +62,17 @@ export const TechPoints = () => {
     }
 
     const fetchTechPoint = async () => {
-        setTechTaskPoints(await TechPointApi.fetchTechPoints(121));
+        const techPoints = await TechPointApi.fetchTechPoints(121);
+        const newTechPoints = techPoints.map(techPoint => {
+            techPoint.position.rects = [techPoint.position.boundingRect]
+            return techPoint;
+        })
+        setTechTaskPoints(newTechPoints);
     }
 
-    const HighlightPopup = () => (
+    const HighlightPopup = ({techPoint}: HighlightPopupProps) => (
         <div className="Highlight__popup">
-            ПИМ: 123
+            {techPoint.description}
         </div>
     );
 
@@ -84,7 +94,7 @@ export const TechPoints = () => {
 
         return (
             <Popup
-                popupContent={<HighlightPopup/>}
+                popupContent={<HighlightPopup techPoint={highlight}/>}
                 onMouseOver={(popupContent: any) =>
                     setTip(highlight, highlight => popupContent)
                 }
@@ -103,15 +113,17 @@ export const TechPoints = () => {
             selectedTargetObjectId={selectedTargetObjectId}
             tipText={'Добавить пункт ТЗ'}
             onOpen={transformSelection}
-            onConfirm={(description, selectedPim, selectedModeId) => {
+            onConfirm={ async (description, selectedPim, selectedModeId) => {
                 const modes = [selectedModeId];
                 const position = {
                     pageNumber: positionSelection.pageNumber,
-                    boundingRect: positionSelection.boundingRect,
+                    rects: positionSelection.rects,
+                    boundingRect: positionSelection.boundingRect
                 }
-                addTechPoint({description, technicalTaskSystemId: 121, modes, name: content.text, position})
+                await addTechPoint({description, technicalTaskSystemId: 121, modes, name: content.text, position})
                 hideTipAndSelection();
-                fetchTechPoint();
+                console.log(positionSelection);
+                await fetchTechPoint();
             }}
         />
     )
@@ -121,8 +133,6 @@ export const TechPoints = () => {
             {(pdfDocument: any) => (
                 <PdfHighlighter
                     pdfDocument={pdfDocument}
-                    scrollRef={() => {
-                    }}
                     highlights={techTaskPoints}
                     onSelectionFinished={onSelectionFinished}
                     highlightTransform={highlightTransform}
@@ -131,40 +141,53 @@ export const TechPoints = () => {
         </PdfLoader>
     )
 
-    /*const renderTechPointsTable = () => {
+    const renderTechPointsTable = () => {
         return (
             <TableContainer component={Paper}>
                 <Table>
                     <TableHead>
                         <TableRow>
                             <TableCell>
-                                <b>Название ТЗ</b>
+                                <b>Название пункта ТЗ</b>
                             </TableCell>
-                            <TableCell align="right"><b>ID</b></TableCell>
+                            <TableCell align="right"><b>Описание</b></TableCell>
+                            <TableCell align="right"><b>Открыть</b></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {techTaskPoints.map(() => (
+                        {techTaskPoints.map((techTask) => (
                             <TableRow key={techTask.id}>
                                 <TableCell component="th" scope="row">
                                     {techTask.name}
                                 </TableCell>
-                                <TableCell align="right">{techTask.id}</TableCell>
+                                <TableCell align="right">{techTask.description}</TableCell>
+                                <TableCell align="right">
+                                    <Button onClick={() => setSelectedHighlight(techTask.id)}>Открыть
+                                    </Button>
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
                 </Table>
             </TableContainer>
         )
-    }*/
+    }
 
     return (
-        <Box style={{
-            height: "86vh",
-            width: "50vw",
-            position: "relative"
-        }}>
-            {renderPdfTechTask()}
-        </Box>
+        <Grid container>
+            <Grid item xs={6}>
+                <Box style={{
+                    height: "88vh",
+                    width: "45vw",
+                    position: "relative"
+                }}>
+                    {renderPdfTechTask()}
+
+                </Box>
+            </Grid>
+            <Grid item xs={6}>
+                {renderTechPointsTable()}
+            </Grid>
+        </Grid>
     )
 }

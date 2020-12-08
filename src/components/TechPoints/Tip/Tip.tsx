@@ -160,69 +160,8 @@ export const Tip = ({onConfirm, onOpen, onUpdate, tipText, selectedTargetObjectI
                             }}>Сохранить</Button>
                     </Grid>
                 </Grid>
-                /*<form
-                    className="Tip__card"
-                >
-                    <TextField label="Описание" onChange={onChangeDescription}/>
-                    <Button variant={"contained"} onClick={event => {
-                        event.preventDefault();
-                        onConfirm(description);
-                    }}>Сохранить</Button>
-                </form>*/
+
             )}
         </div>
     );
 }
-
-/*
-export class Tip extends React.Component<TipProps, TipState> {
-
-    constructor(props: TipProps | Readonly<TipProps>) {
-        super(props);
-        this.state = {
-            compact: true,
-            text: "",
-        }
-    }
-
-    // for TipContainer
-    componentDidUpdate(nextProps: TipProps, nextState: TipState) {
-        const {onUpdate} = this.props;
-
-        if (onUpdate && this.state.compact !== nextState.compact) {
-            onUpdate();
-        }
-    }
-
-    render() {
-        const {onConfirm, onOpen, tipText} = this.props;
-        const {compact} = this.state;
-
-        return (
-            <div className="Tip">
-                {compact ? (
-                    <div
-                        className="Tip__compact"
-                        onClick={() => {
-                            onOpen();
-                            this.setState({compact: false});
-                        }}
-                    >
-                        {tipText}
-                    </div>
-                ) : (
-                    <form
-                        className="Tip__card"
-                    >
-                        <TextField label="Описание" />
-                        <Button variant={"contained"} onClick={event => {
-                            event.preventDefault();
-                            onConfirm();
-                        }}>Сохранить</Button>
-                    </form>
-                )}
-            </div>
-        );
-    }
-}
-*/
