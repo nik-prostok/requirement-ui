@@ -8,27 +8,21 @@ import {
     PdfHighlighter,
     Highlight,
     Popup,
-    AreaHighlight,
     setPdfWorker,
 } from "react-pdf-highlighter";
-import {useState} from "react";
-import {T_Comment, T_Highlight, T_HighlightComment, T_NewHighlight} from "../../../types/react-pdf-highlighter/types";
+import {useEffect, useState} from "react";
 import {
     Box,
-    Button,
     CircularProgress,
-    Container,
-    Input,
-    Paper,
-    Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
-    TextField,
     Theme,
-    Tooltip
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
-import ReactTooltip from "react-tooltip";
-import {Tip} from "../../framework/Tip/Tip";
-import {TechPoint, TechPointWithId} from "./interfaces/TechPoint";
+import {Tip} from "./Tip/Tip";
+import {TechPoint} from "./interfaces/TechPoint";
+import {Mode} from "./interfaces/Modes";
+import {useSelector} from "react-redux";
+import {RootState} from "../../store/createStore";
+import {AddTechPointReq, TechPointApi} from "./api/TechPoint.api";
 
 setPdfWorker(PDFWorker);
 
@@ -45,49 +39,25 @@ export const TechPoints = () => {
 
     const classes = useStyles();
 
-    const [docURL, setDocURL] = useState<string>('/technicalTask/download?technicalTaskId=131');
-    const [techTaskPoints, setTechTaskPoints] = useState<TechPointWithId[]>([]);
+    const [docURL, setDocURL] = useState<string>('/technicalTask/download?technicalTaskId=152');
+    const [techTaskPoints, setTechTaskPoints] = useState<TechPoint[]>([]);
 
-    const getNextId = () => String(Math.random()).slice(2);
+    const {selectedTargetObjectId} = useSelector((state: RootState) => {
+        return {
+            selectedTargetObjectId: state.targetObjects.selectedTargetObject.selectedTargetObjectId,
+        }
+    })
 
-    const scrollViewerTo = (highlight: any) => {
-    };
+    useEffect(() => {
+        fetchTechPoint();
+    }, [])
 
-    const getHighlightById = (id: string) => {
-        return techTaskPoints.find(techPoint => techPoint.id === id);
+    const addTechPoint = async (addTechPointReq: AddTechPointReq) => {
+        await TechPointApi.addTechPoint(addTechPointReq);
     }
 
-    const addHighlight = (techPoint: TechPoint) => {
-
-        console.log("Saving highlight", techPoint);
-
-        setTechTaskPoints(prevTechPoints => [...prevTechPoints, {...techPoint, id: getNextId()}])
-
-    }
-
-    const updateHighlight = (highlightId: string, position: Object, content: Object) => {
-        console.log("Updating highlight", highlightId, position, content);
-
-        /*setTechTaskPoints()
-
-        this.setState({
-            techTaskPoints: this.state.techTaskPoints.map(h => {
-                const {
-                    id,
-                    position: originalPosition,
-                    content: originalContent,
-                    ...rest
-                } = h;
-                return id === highlightId
-                    ? {
-                        id,
-                        position: { ...originalPosition, ...position },
-                        content: { ...originalContent, ...content },
-                        ...rest
-                    }
-                    : h;
-            })
-        });*/
+    const fetchTechPoint = async () => {
+        setTechTaskPoints(await TechPointApi.fetchTechPoints(121));
     }
 
     const HighlightPopup = () => (
@@ -97,7 +67,7 @@ export const TechPoints = () => {
     );
 
     const highlightTransform = (
-        highlight: TechPointWithId,
+        highlight: TechPoint,
         index: string | number | null | undefined,
         setTip: (arg0: any, arg1: (highlight: any) => any) => any,
         hideTip: any,
@@ -125,16 +95,23 @@ export const TechPoints = () => {
         );
     }
 
-    const onSelectionFinished = (position: any,
+    const onSelectionFinished = (positionSelection: any,
                                  content: any,
                                  hideTipAndSelection: () => void,
                                  transformSelection: any) => (
         <Tip
+            selectedTargetObjectId={selectedTargetObjectId}
             tipText={'Добавить пункт ТЗ'}
             onOpen={transformSelection}
-            onConfirm={() => {
-                addHighlight({text: content, position});
+            onConfirm={(description, selectedPim, selectedModeId) => {
+                const modes = [selectedModeId];
+                const position = {
+                    pageNumber: positionSelection.pageNumber,
+                    boundingRect: positionSelection.boundingRect,
+                }
+                addTechPoint({description, technicalTaskSystemId: 121, modes, name: content.text, position})
                 hideTipAndSelection();
+                fetchTechPoint();
             }}
         />
     )

@@ -75,7 +75,7 @@ export const GenerateAct = () => {
         setIsLoading(true);
         setIsError(false);
         try {
-            setPims(await PimsApi.getTechTaskListByObjectId(selectedTargetObjectId));
+            setPims(await PimsApi.getPimsByObjectId(selectedTargetObjectId));
         } catch {
             setIsError(true);
         } finally {
@@ -106,7 +106,10 @@ export const GenerateAct = () => {
                 <FormControl className={classes.formControl}>
                     <InputLabel>ПиМ</InputLabel>
                     <Select value={selectedPimId} onChange={handleChangePim}>
-                        {pims.map(pim => <MenuItem value={pim.id}>{pim.name}</MenuItem>)}
+                        <MenuItem disabled value={0}>
+                            Выберите ПиМ
+                        </MenuItem>
+                        {pims.map(pim => <MenuItem value={pim.id}>ПиМ {pim.id}</MenuItem>)}
                     </Select>
                 </FormControl>
             </Grid>
@@ -114,6 +117,9 @@ export const GenerateAct = () => {
                 <FormControl className={classes.formControl}>
                     <InputLabel>Подсистема</InputLabel>
                     <Select value={selectedSubsystemId} onChange={handleChangeSubsystem}>
+                        <MenuItem disabled value={0}>
+                            Выберите подсистему
+                        </MenuItem>
                         {subsystems.map(subsystem => <MenuItem value={subsystem.id}>{subsystem.name}</MenuItem>)}
                     </Select>
                 </FormControl>

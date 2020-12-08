@@ -15,10 +15,12 @@ export type Position = {
 }
 
 export type TechPoint = {
+    id: number;
     position: Position;
-    text: string;
+    description: string;
+    name: string;
 }
 
-export type TechPointWithId = {
-    id: string;
-} & TechPoint;
+export interface TechPointRes {
+    points: TechPoint[];
+}

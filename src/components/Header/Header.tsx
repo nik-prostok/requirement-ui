@@ -51,7 +51,7 @@ export const Header: React.FunctionComponent<HeaderProps> = ({children}) => {
                 </IconButton>
 
                 <Typography className={classes.title} variant="h6">
-                    Система управления требованиями
+                    Система формирования акта
                 </Typography>
                 <SelectObject/>
             </Toolbar>
