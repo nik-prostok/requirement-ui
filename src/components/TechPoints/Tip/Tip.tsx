@@ -99,7 +99,7 @@ export const Tip = ({onConfirm, onOpen, onUpdate, tipText, selectedTargetObjectI
         setSelectedModeId(event.target.value as number);
     };
 
-    const onChangeDescription = (event: React.ChangeEvent<{ value: unknown }>) => {
+    const onChangeName = (event: React.ChangeEvent<{ value: unknown }>) => {
         setDescription(event.target.value as string);
     }
 
@@ -124,6 +124,11 @@ export const Tip = ({onConfirm, onOpen, onUpdate, tipText, selectedTargetObjectI
                     </Grid>
                     <Grid item>
                         <FormControl className={classes.formControl}>
+                            <TextField label="Название пункта" onChange={onChangeName}/>
+                        </FormControl>
+                    </Grid>
+                    <Grid item>
+                        <FormControl className={classes.formControl}>
                             <InputLabel>ПиМ</InputLabel>
                             <Select value={selectedPimId} onChange={handleChangePim}>
                                 <MenuItem disabled value={0}>
@@ -142,11 +147,6 @@ export const Tip = ({onConfirm, onOpen, onUpdate, tipText, selectedTargetObjectI
                                 </MenuItem>
                                 {modes.map(mode => <MenuItem value={mode.id}>{mode.simulatedMode}</MenuItem>)}
                             </Select>
-                        </FormControl>
-                    </Grid>
-                    <Grid item>
-                        <FormControl className={classes.formControl}>
-                            <TextField label="Описание" onChange={onChangeDescription}/>
                         </FormControl>
                     </Grid>
                     <Grid item>
