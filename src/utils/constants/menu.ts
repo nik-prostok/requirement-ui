@@ -10,8 +10,8 @@ export const menuItems = [{
     label: 'Пункты ТЗ',
     path: '/techPoints',
     icon: FormatListNumberedIcon,
-},{
+},/*{
     label: 'Генерация акта',
     path: '/generateAct',
     icon: NoteAddIcon,
-}]
+}*/]
