@@ -14,8 +14,7 @@ import {
     Typography
 } from "@material-ui/core";
 import {useEffect, useState} from "react";
-import {Mode} from "../interfaces/Modes";
-import {Pim} from "../../../framework/Pims/interfaces/pims";
+import {Mode, Pim} from "../../../framework/Pims/interfaces/pims";
 import {makeStyles} from "@material-ui/core/styles";
 import {useSelector} from "react-redux";
 import {RootState} from "../../../store/createStore";
@@ -23,7 +22,7 @@ import {PimsApi} from "../../../framework/Pims/api/getPims.api";
 import {ModesApi} from "../api/Modes.api";
 
 interface TipProps {
-    onConfirm: (description: string, selectedPim: number, selectedModeId: number) => void,
+    onConfirm: (description: string, selectedPim: string, selectedModeId: string) => void,
     onOpen: () => void,
     onUpdate?: () => void,
     tipText: string;
@@ -47,14 +46,14 @@ export const Tip = ({onConfirm, onOpen, onUpdate, tipText, selectedTargetObjectI
 
     const [compactMode, setCompactMode] = useState(true);
     const [description, setDescription] = useState('');
-    const [selectedPimId, setSelectedPimId] = useState<number>(0);
-    const [selectedModeId, setSelectedModeId] = useState<number>(0);
+    const [selectedPim, setSelectedPim] = useState<Pim | null>(null);
+    const [selectedModeId, setSelectedModeId] = useState<string>('');
 
     const [modes, setModes] = useState<Mode[]>([]);
     const [pims, setPims] = useState<Pim[]>([]);
 
     useEffect(() => {
-        setSelectedPimId(0);
+        setSelectedPim(null);
         if (selectedTargetObjectId) {
             fetchPims();
         }
@@ -78,25 +77,18 @@ export const Tip = ({onConfirm, onOpen, onUpdate, tipText, selectedTargetObjectI
         }
     }
 
-    const fetchModes = async (pimId: number) => {
-        setIsLoading(true);
-        setIsError(false);
-        try {
-            setModes(await ModesApi.fetchModesByPimId(pimId));
-        } catch {
-            setIsError(true);
-        } finally {
-            setIsLoading(false);
+    useEffect(() => {
+        if (selectedPim) {
+            setModes(selectedPim.modes)
         }
-    }
+    }, [selectedPim])
 
     const handleChangePim = (event: React.ChangeEvent<{ value: unknown }>) => {
-        setSelectedPimId(event.target.value as number);
-        fetchModes(event.target.value as number);
+        setSelectedPim(event.target.value as Pim);
     };
 
     const handleChangeMode = (event: React.ChangeEvent<{ value: unknown }>) => {
-        setSelectedModeId(event.target.value as number);
+        setSelectedModeId(event.target.value as string);
     };
 
     const onChangeName = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -130,33 +122,33 @@ export const Tip = ({onConfirm, onOpen, onUpdate, tipText, selectedTargetObjectI
                     <Grid item>
                         <FormControl className={classes.formControl}>
                             <InputLabel>ПиМ</InputLabel>
-                            <Select value={selectedPimId} onChange={handleChangePim}>
+                            <Select value={selectedPim} onChange={handleChangePim}>
                                 <MenuItem disabled value={0}>
                                     Выберите ПиМ
                                 </MenuItem>
-                                {pims.map(pim => <MenuItem value={pim.id}>ПиМ {pim.id}</MenuItem>)}
+                                {pims.map(pim => <MenuItem value={pim as any}>{pim.namePiM}</MenuItem>)}
                             </Select>
                         </FormControl>
                     </Grid>
                     <Grid item>
                         <FormControl className={classes.formControl}>
                             <InputLabel>Режим</InputLabel>
-                            <Select disabled={!selectedPimId} value={selectedModeId} onChange={handleChangeMode}>
+                            <Select disabled={!selectedPim} value={selectedModeId} onChange={handleChangeMode}>
                                 <MenuItem disabled value={0}>
                                     Выберите режим
                                 </MenuItem>
-                                {modes.map(mode => <MenuItem value={mode.id}>{mode.simulatedMode}</MenuItem>)}
+                                {modes.map(mode => <MenuItem value={mode._id}>{mode.modeNo} {mode.modeName}</MenuItem>)}
                             </Select>
                         </FormControl>
                     </Grid>
                     <Grid item>
                         <Button
-                            disabled={!selectedPimId || !selectedModeId || !description}
+                            disabled={!selectedPim || !selectedModeId || !description}
                             color="primary"
                             variant={"contained"}
                             onClick={event => {
                                 event.preventDefault();
-                                onConfirm(description, selectedPimId, selectedModeId);
+                                onConfirm(description, selectedPim ? selectedPim._id : '', selectedModeId);
                             }}>Сохранить</Button>
                     </Grid>
                 </Grid>

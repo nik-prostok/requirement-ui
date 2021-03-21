@@ -69,8 +69,8 @@ export const SelectObject = () => {
                         <MenuItem disabled value=''>
                             Выберите объект
                         </MenuItem>
-                        {targetObjects.map(targetObject => (
-                            <MenuItem key={targetObject.id} value={targetObject.id}>
+                        {targetObjects.map((targetObject) => (
+                            <MenuItem key={targetObject._id} value={targetObject._id}>
                                 {targetObject.officialName}
                             </MenuItem>
                         ))}

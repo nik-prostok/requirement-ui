@@ -98,9 +98,9 @@ export const AddTechTask = ({onAddTechTask}:AddTechTaskProps) => {
         setIsError(false);
         try {
             let bodyFormData = new FormData();
-            bodyFormData.append('objectId', selectedTargetObjectId);
-            bodyFormData.append('name', nameTechTask);
-            bodyFormData.append('file', acceptedFiles[0]);
+            bodyFormData.append('targetObjectId', selectedTargetObjectId);
+            bodyFormData.append('nameTechTask', nameTechTask);
+            bodyFormData.append('techTaskDoc', acceptedFiles[0]);
             await AddTechTaskApi.addTechTask(bodyFormData);
             setIsSuccessLoaded(true);
         } catch {

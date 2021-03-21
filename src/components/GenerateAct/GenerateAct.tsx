@@ -109,7 +109,7 @@ export const GenerateAct = () => {
                         <MenuItem disabled value={0}>
                             Выберите ПиМ
                         </MenuItem>
-                        {pims.map(pim => <MenuItem value={pim.id}>ПиМ {pim.id}</MenuItem>)}
+                        {pims.map(pim => <MenuItem value={pim._id}>ПиМ {pim._id}</MenuItem>)}
                     </Select>
                 </FormControl>
             </Grid>

@@ -44,11 +44,11 @@ export const TechTasksList = ({techTasksList, isErrorRender = false, isLoadingRe
                 </TableHead>
                 <TableBody>
                     {techTasksList.map((techTask) => (
-                        <TableRow key={techTask.id}>
+                        <TableRow key={techTask._id}>
                             <TableCell component="th" scope="row">
-                                {techTask.name}
+                                {techTask.titleTechTask}
                             </TableCell>
-                            <TableCell align="right">{techTask.id}</TableCell>
+                            <TableCell align="right">{techTask._id}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

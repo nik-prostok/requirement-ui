@@ -3,6 +3,7 @@ export interface ListTechTaskResponse {
 }
 
 export interface TechTask {
-    name: string;
-    id: number;
+    titleTechTask: string;
+    _id: string;
+
 }

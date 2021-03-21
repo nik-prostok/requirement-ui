@@ -1,8 +1,8 @@
 import {axiosInstance} from "../../../api/api";
-import {Pims} from "../interfaces/pims";
+import {Pim, Pims} from "../interfaces/pims";
 
 export const PimsApi = {
-    getPimsByObjectId(objectId: string) {
-        return axiosInstance.get<Pims>('/pims', {params: {objectId}}).then(res => res.data.pims)
+    getPimsByObjectId(targetObjectId: string) {
+        return axiosInstance.get<Pim[]>('/pims/getPimByObjectId', {params: {targetObjectId}}).then(res => res.data)
     }
 }

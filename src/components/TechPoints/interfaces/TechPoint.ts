@@ -16,10 +16,11 @@ export type PositionHighLight = {
 }
 
 export type TechPoint = {
-    id: number;
+    _id: string;
+    modeId: string;
     position: PositionHighLight;
     description: string;
-    name: string;
+    noPoint: string;
 }
 
 export interface TechPointRes {

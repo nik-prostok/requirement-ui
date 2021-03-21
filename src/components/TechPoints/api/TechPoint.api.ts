@@ -2,10 +2,9 @@ import {axiosInstance} from "../../../api/api";
 import {PositionHighLight, ScaledCoordinates, TechPointRes} from "../interfaces/TechPoint";
 
 export interface AddTechPointReq {
-    name: string;
+    noPoint: string;
     description: string;
-    technicalTaskSystemId: number;
-    modes: number[];
+    modeId: string;
     position: {
         boundingRect: ScaledCoordinates;
         pageNumber: number;

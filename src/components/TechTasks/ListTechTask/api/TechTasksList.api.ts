@@ -1,8 +1,8 @@
 import {axiosInstance} from "../../../../api/api";
-import {ListTechTaskResponse} from "../interfaces/TechTaskList.interface";
+import {ListTechTaskResponse, TechTask} from "../interfaces/TechTaskList.interface";
 
 export const TechTaskListApi = {
-    getTechTaskListByObjectId(objectId: string) {
-        return axiosInstance.get<ListTechTaskResponse>('/technicalTasks', {params: {objectId}}).then(res => res.data.technicalTasks)
+    getTechTaskListByObjectId(targetObjectId: string) {
+        return axiosInstance.get<TechTask[]>('/techTask/getByObjectId', {params: {targetObjectId}}).then(res => res.data)
     }
 }

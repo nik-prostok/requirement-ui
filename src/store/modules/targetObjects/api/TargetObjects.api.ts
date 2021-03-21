@@ -3,6 +3,6 @@ import {TargetObjectsResponse} from "../interfaces/TargetObject";
 
 export const TargetObjectsApi = {
     getTargetObjects() {
-        return axiosInstance.get<TargetObjectsResponse>('/objects').then(res => res.data.objects)
+        return axiosInstance.get<TargetObjectsResponse>('/targetObjects').then(res => res.data)
     }
 }

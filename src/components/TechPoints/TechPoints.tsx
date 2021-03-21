@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 }));
 
-const techTaskURL = '/technicalTask/download';
+const techTaskURL = '/techTask/getPdfTechTask';
 
 export const TechPoints = () => {
 
@@ -80,13 +80,13 @@ export const TechPoints = () => {
         }
     })
 
-    useEffect(() => {
+    /*useEffect(() => {
         fetchSubsystems();
-    }, [selectedTechTaskId])
+    }, [selectedTechTaskId])*/
 
     useEffect(() => {
         fetchTechPoint();
-    }, [selectedSubsystemId])
+    }, [selectedTechTaskId])
 
     useEffect(() => {
         fetchTechTasksList();
@@ -121,7 +121,7 @@ export const TechPoints = () => {
 
     const HighlightPopup = ({techPoint}: HighlightPopupProps) => (
         <div className="Highlight__popup">
-            {techPoint.name}
+            {techPoint.noPoint}
         </div>
     );
 
@@ -163,7 +163,6 @@ export const TechPoints = () => {
             tipText={'Добавить пункт ТЗ'}
             onOpen={transformSelection}
             onConfirm={ async (name, selectedPim, selectedModeId) => {
-                const modes = [selectedModeId];
                 const position = {
                     pageNumber: positionSelection.pageNumber,
                     boundingRect: positionSelection.boundingRect
@@ -171,9 +170,8 @@ export const TechPoints = () => {
                 if (selectedSubsystemId) {
                     await addTechPoint({
                         description: content.text,
-                        technicalTaskSystemId: selectedSubsystemId,
-                        modes,
-                        name,
+                        modeId: selectedModeId,
+                        noPoint: name,
                         position})
                     hideTipAndSelection();
                     await fetchTechPoint();
@@ -184,7 +182,7 @@ export const TechPoints = () => {
 
     const onChangeTechTask = (event: React.ChangeEvent<{ value: unknown }>) => {
         setSelectedTechTaskId(event.target.value as number);
-        setDocURL(`${techTaskURL}?technicalTaskId=${event.target.value}`);
+        setDocURL(`${techTaskURL}?techTaskId=${event.target.value}`);
     }
 
     const onChangeSubsystem = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -195,7 +193,7 @@ export const TechPoints = () => {
         <FormControl className={classes.formControl}>
             <InputLabel>Техническое задание</InputLabel>
             <Select placeholder={'Выберите ТЗ'} disabled={!selectedTargetObjectId} value={selectedTechTaskId} onChange={onChangeTechTask}>
-                {techTasksList && techTasksList.map(techTask => <MenuItem value={techTask.id}>{techTask.name}</MenuItem>)}
+                {techTasksList && techTasksList.map(techTask => <MenuItem value={techTask._id}>{techTask.titleTechTask}</MenuItem>)}
             </Select>
         </FormControl>
     )
@@ -236,9 +234,9 @@ export const TechPoints = () => {
                     </TableHead>
                     <TableBody>
                         {techTaskPoints.map((techTask) => (
-                            <TableRow key={techTask.id}>
+                            <TableRow key={techTask._id}>
                                 <TableCell component="th" scope="row">
-                                    {techTask.name}
+                                    {techTask.noPoint}
                                 </TableCell>
                                 <TableCell align="right">{techTask.description}</TableCell>
                             </TableRow>
@@ -261,18 +259,18 @@ export const TechPoints = () => {
                 </Box>
             </Grid>
             <Grid container item xs={6} direction={'column'} spacing={3}>
-                <Grid container item component={Paper}>
-                    <Grid item xs={6}>
+                <Grid item component={Paper}>
+                    <Grid item xs={12}>
                         {renderSelectTechTask()}
                     </Grid>
-                    <Grid item xs={6}>
+                    {/*<Grid item xs={6}>
                         {renderSelectSubsystem()}
-                    </Grid>
+                    </Grid>*/}
                 </Grid>
                 <Grid item style={{paddingLeft: 0, paddingRight: 0}}>
                     {selectedSubsystemId && renderTechPointsTable()}
                     {!selectedSubsystemId && <Paper style={{height: '50px'}}>
-                        <h3 style={{margin: '30px'}}>Выберите объект, ТЗ и подсистему</h3>
+                        <h3 style={{margin: '30px'}}>Выберите объект и ТЗ, чтобы увидеть список пунктов</h3>
                     </Paper>}
                 </Grid>
             </Grid>

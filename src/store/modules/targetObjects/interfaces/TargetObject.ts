@@ -1,8 +1,6 @@
 export interface TargetObject {
     officialName: string,
-    id: string,
+    _id: string,
 }
 
-export interface TargetObjectsResponse {
-    objects: TargetObject[];
-}
+export type TargetObjectsResponse = TargetObject[];
