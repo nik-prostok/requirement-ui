@@ -39,6 +39,7 @@ import {SubsystemApi} from "../../framework/Subsystems/api/getSubsystems.api";
 import {Subsystem, System} from "../../framework/Subsystems/interfaces/subsystems";
 import {TechTask} from "../TechTasks/ListTechTask/interfaces/TechTaskList.interface";
 import {TechTaskListApi} from "../TechTasks/ListTechTask/api/TechTasksList.api";
+import {log} from "util";
 
 setPdfWorker(PDFWorker);
 
@@ -66,12 +67,10 @@ export const TechPoints = () => {
 
     const [docURL, setDocURL] = useState<string>();
 
-    const [selectedTechTaskId, setSelectedTechTaskId] = useState<number>();
-    const [selectedSubsystemId, setSelectedSubsystemId] = useState<number>();
+    const [selectedTechTask, setSelectedTechTask] = useState<TechTask>();
 
-    const [techTaskPoints, setTechTaskPoints] = useState<TechPoint[]>([]);
-    const [subsystems, setSubsystems] = useState<System[]>([]);
     const [techTasksList, setTechTasksList] = useState<TechTask[]>([]);
+    const [techTaskPoints, setTechTaskPoints] = useState<TechPoint[]>([]);
     const [selectedHighlight, setSelectedHighlight] = useState<number>();
 
     const {selectedTargetObjectId} = useSelector((state: RootState) => {
@@ -80,42 +79,32 @@ export const TechPoints = () => {
         }
     })
 
-    /*useEffect(() => {
-        fetchSubsystems();
-    }, [selectedTechTaskId])*/
-
-    useEffect(() => {
-        fetchTechPoint();
-    }, [selectedTechTaskId])
-
     useEffect(() => {
         fetchTechTasksList();
     }, [selectedTargetObjectId])
+
+    useEffect(() => {
+        console.log('changeSelectedTechTask')
+        if (selectedTechTask) {
+            setDocURL(`${techTaskURL}?techTaskId=${selectedTechTask._id}`);
+            setTechTaskPoints(selectedTechTask.techTaskPoints);
+        }
+    }, [selectedTechTask])
+
+    useEffect(() => {
+        if (selectedTechTask && selectedTechTask._id){
+            const newTechTask = techTasksList.find(techTask => techTask._id === selectedTechTask._id);
+            if (newTechTask) setSelectedTechTask(newTechTask);
+        }
+    }, [techTasksList])
 
     const addTechPoint = async (addTechPointReq: AddTechPointReq) => {
         await TechPointApi.addTechPoint(addTechPointReq);
     }
 
-    const fetchTechPoint = async () => {
-        if (selectedSubsystemId) {
-            const techPoints = await TechPointApi.fetchTechPoints(selectedSubsystemId);
-            const newTechPoints = techPoints.map(techPoint => {
-                techPoint.position.rects = [techPoint.position.boundingRect]
-                return techPoint;
-            })
-            setTechTaskPoints(newTechPoints);
-        }
-    }
-
     const fetchTechTasksList = async () => {
         if (selectedTargetObjectId) {
             setTechTasksList(await TechTaskListApi.getTechTaskListByObjectId(selectedTargetObjectId));
-        }
-    }
-
-    const fetchSubsystems = async () => {
-        if (selectedTechTaskId) {
-            setSubsystems(await SubsystemApi.getSubsystemsByTechTaskId(selectedTechTaskId));
         }
     }
 
@@ -162,47 +151,49 @@ export const TechPoints = () => {
             selectedTargetObjectId={selectedTargetObjectId}
             tipText={'Добавить пункт ТЗ'}
             onOpen={transformSelection}
-            onConfirm={ async (name, selectedPim, selectedModeId) => {
+            onConfirm={async (name, selectedPim, selectedModeId) => {
+                console.log(positionSelection)
                 const position = {
                     pageNumber: positionSelection.pageNumber,
                     boundingRect: positionSelection.boundingRect
                 }
-                if (selectedSubsystemId) {
+                if (selectedTechTask && selectedTechTask._id) {
                     await addTechPoint({
                         description: content.text,
                         modeId: selectedModeId,
                         noPoint: name,
-                        position})
-                    hideTipAndSelection();
-                    await fetchTechPoint();
+                        position,
+                        techTaskId: selectedTechTask._id
+                    })
                 }
+                hideTipAndSelection();
+                await fetchTechTasksList();
             }}
         />
     )
 
     const onChangeTechTask = (event: React.ChangeEvent<{ value: unknown }>) => {
-        setSelectedTechTaskId(event.target.value as number);
-        setDocURL(`${techTaskURL}?techTaskId=${event.target.value}`);
-    }
-
-    const onChangeSubsystem = (event: React.ChangeEvent<{ value: unknown }>) => {
-        setSelectedSubsystemId(event.target.value as number);
+        const newTechTask = techTasksList
+            .find(techTask => techTask._id === event.target.value as string)
+        setSelectedTechTask(newTechTask);
     }
 
     const renderSelectTechTask = () => (
         <FormControl className={classes.formControl}>
             <InputLabel>Техническое задание</InputLabel>
-            <Select placeholder={'Выберите ТЗ'} disabled={!selectedTargetObjectId} value={selectedTechTaskId} onChange={onChangeTechTask}>
-                {techTasksList && techTasksList.map(techTask => <MenuItem value={techTask._id}>{techTask.titleTechTask}</MenuItem>)}
-            </Select>
-        </FormControl>
-    )
-
-    const renderSelectSubsystem = () => (
-        <FormControl className={classes.formControl}>
-            <InputLabel>Подсистема</InputLabel>
-            <Select placeholder={'Выберите подсистему'} disabled={!selectedTechTaskId && !selectedTargetObjectId} value={selectedSubsystemId} onChange={onChangeSubsystem}>
-                {subsystems && subsystems.map(subsystem => <MenuItem value={subsystem.id}>{subsystem.system}</MenuItem>)}
+            <Select
+                placeholder={'Выберите ТЗ'}
+                disabled={!selectedTargetObjectId}
+                value={selectedTechTask ? selectedTechTask._id : null}
+                onChange={onChangeTechTask}
+            >
+                {techTasksList && techTasksList.map(techTask =>
+                    <MenuItem
+                        key={techTask._id}
+                        value={techTask._id}
+                    >
+                        {techTask.titleTechTask}
+                    </MenuItem>)}
             </Select>
         </FormControl>
     )
@@ -263,15 +254,12 @@ export const TechPoints = () => {
                     <Grid item xs={12}>
                         {renderSelectTechTask()}
                     </Grid>
-                    {/*<Grid item xs={6}>
-                        {renderSelectSubsystem()}
-                    </Grid>*/}
                 </Grid>
                 <Grid item style={{paddingLeft: 0, paddingRight: 0}}>
-                    {selectedSubsystemId && renderTechPointsTable()}
-                    {!selectedSubsystemId && <Paper style={{height: '50px'}}>
+                    {!selectedTechTask && <Paper style={{height: '50px'}}>
                         <h3 style={{margin: '30px'}}>Выберите объект и ТЗ, чтобы увидеть список пунктов</h3>
                     </Paper>}
+                    {selectedTechTask && renderTechPointsTable()}
                 </Grid>
             </Grid>
         </Grid>

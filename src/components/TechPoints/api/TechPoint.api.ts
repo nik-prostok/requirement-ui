@@ -9,11 +9,12 @@ export interface AddTechPointReq {
         boundingRect: ScaledCoordinates;
         pageNumber: number;
     };
+    techTaskId: string;
 }
 
 export const TechPointApi = {
     addTechPoint(addTechPointReq: AddTechPointReq) {
-        return axiosInstance.post('/technicalTask/point', {...addTechPointReq}).then(res => res.data)
+        return axiosInstance.post('/techTaskPoint', {...addTechPointReq}).then(res => res.data)
     },
     fetchTechPoints(technicalTaskSystemId: number) {
         return axiosInstance.get<TechPointRes>('/technicalTask/points', {params: {technicalTaskSystemId}}).then(res => res.data.points)

@@ -1,5 +1,5 @@
 import {axiosInstance} from "../../../../api/api";
-import {ListTechTaskResponse, TechTask} from "../interfaces/TechTaskList.interface";
+import {TechTask} from "../interfaces/TechTaskList.interface";
 
 export const TechTaskListApi = {
     getTechTaskListByObjectId(targetObjectId: string) {
