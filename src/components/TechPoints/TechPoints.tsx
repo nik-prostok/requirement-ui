@@ -39,7 +39,6 @@ import {SubsystemApi} from "../../framework/Subsystems/api/getSubsystems.api";
 import {Subsystem, System} from "../../framework/Subsystems/interfaces/subsystems";
 import {TechTask} from "../TechTasks/ListTechTask/interfaces/TechTaskList.interface";
 import {TechTaskListApi} from "../TechTasks/ListTechTask/api/TechTasksList.api";
-import {log} from "util";
 
 setPdfWorker(PDFWorker);
 
@@ -80,16 +79,19 @@ export const TechPoints = () => {
     })
 
     useEffect(() => {
-        fetchTechTasksList();
-    }, [selectedTargetObjectId])
-
-    useEffect(() => {
-        console.log('changeSelectedTechTask')
-        if (selectedTechTask) {
+        if (selectedTechTask && selectedTechTask.techTaskPoints) {
+            const newTechPoints = selectedTechTask.techTaskPoints.map(techPoint => {
+                techPoint.position.rects = [techPoint.position.boundingRect]
+                return techPoint;
+            })
+            setTechTaskPoints(newTechPoints);
             setDocURL(`${techTaskURL}?techTaskId=${selectedTechTask._id}`);
-            setTechTaskPoints(selectedTechTask.techTaskPoints);
         }
     }, [selectedTechTask])
+
+    useEffect(() => {
+        fetchTechTasksList();
+    }, [selectedTargetObjectId])
 
     useEffect(() => {
         if (selectedTechTask && selectedTechTask._id){
