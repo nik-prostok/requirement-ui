@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
 
 import {TechTask} from "./interfaces/TechTaskList.interface";
-import {RootState} from "../../../store/createStore";
+import {RootState} from "../../../../store/createStore";
 import {TechTaskListApi} from "./api/TechTasksList.api";
 import {
     CircularProgress, Grid,

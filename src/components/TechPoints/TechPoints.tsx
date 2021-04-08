@@ -37,8 +37,8 @@ import {RootState} from "../../store/createStore";
 import {AddTechPointReq, TechPointApi} from "./api/TechPoint.api";
 import {SubsystemApi} from "../../framework/Subsystems/api/getSubsystems.api";
 import {Subsystem, System} from "../../framework/Subsystems/interfaces/subsystems";
-import {TechTask} from "../TechTasks/ListTechTask/interfaces/TechTaskList.interface";
-import {TechTaskListApi} from "../TechTasks/ListTechTask/api/TechTasksList.api";
+import {TechTask} from "../Docs/TechTask/ListTechTask/interfaces/TechTaskList.interface";
+import {TechTaskListApi} from "../Docs/TechTask/ListTechTask/api/TechTasksList.api";
 
 setPdfWorker(PDFWorker);
 

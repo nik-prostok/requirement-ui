@@ -14,11 +14,11 @@ import {
     Typography
 } from "@material-ui/core";
 import {useEffect, useState} from "react";
-import {Mode, Pim} from "../../../framework/Pims/interfaces/pims";
+import {Mode, Pim} from "../../Docs/PiMs/ListPiMs/interfaces/pims";
 import {makeStyles} from "@material-ui/core/styles";
 import {useSelector} from "react-redux";
 import {RootState} from "../../../store/createStore";
-import {PimsApi} from "../../../framework/Pims/api/getPims.api";
+import {PimsApi} from "../../Docs/PiMs/ListPiMs/api/getPims.api";
 import {ModesApi} from "../api/Modes.api";
 
 interface TipProps {

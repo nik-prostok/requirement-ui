@@ -1,8 +1,4 @@
 import * as React from "react";
-import {useCallback, useState} from "react";
-
-import {useDropzone} from "react-dropzone";
-import {makeStyles} from "@material-ui/core/styles";
 import {
     Button,
     Card,
@@ -14,13 +10,12 @@ import {
     Theme,
     Typography
 } from "@material-ui/core";
-
-import DoneAllIcon from '@material-ui/icons/DoneAll';
-import WarningIcon from '@material-ui/icons/Warning';
 import SaveIcon from "@material-ui/icons/Save";
-import {useSelector} from "react-redux";
-import {RootState} from "../../../store/createStore";
-import {AddTechTaskApi} from "./api/AddTechTask.api";
+import WarningIcon from "@material-ui/icons/Warning";
+import DoneAllIcon from "@material-ui/icons/DoneAll";
+import {makeStyles} from "@material-ui/core/styles";
+import {useCallback, useState} from "react";
+import {useDropzone} from "react-dropzone";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -43,24 +38,19 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export interface AddTechTaskProps {
-    onAddTechTask?: () => void;
+export interface AddDocProps {
+    onSaveDoc: (nameDoc: string, file: File) => void;
+    isLoading?: boolean;
+    isError?: boolean
+    isSuccessLoaded?: boolean;
+    titleForm?: string;
 }
 
-export const AddTechTask = ({onAddTechTask}:AddTechTaskProps) => {
+export const AddDoc = ({titleForm = '', onSaveDoc, isLoading = false, isError = false, isSuccessLoaded= false}: AddDocProps) => {
 
     const classes = useStyles();
 
-    const [nameTechTask, setNameTechTask] = useState<string>('');
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [isError, setIsError] = useState<boolean>(false);
-    const [isSuccessLoaded, setIsSuccessLoaded] = useState<boolean>(false);
-
-    const {selectedTargetObjectId} = useSelector((state: RootState) => {
-        return {
-            selectedTargetObjectId: state.targetObjects.selectedTargetObject.selectedTargetObjectId,
-        }
-    })
+    const [nameDoc, setNameDoc] = useState<string>('');
 
     const onDrop = useCallback(acceptedFiles => {
         console.log(acceptedFiles)
@@ -88,29 +78,13 @@ export const AddTechTask = ({onAddTechTask}:AddTechTaskProps) => {
         return null
     }
 
+
     const onChangeNameTechTask = (event: React.ChangeEvent<{ value: unknown }>) => {
-        setNameTechTask(event.target.value as string);
+        setNameDoc(event.target.value as string);
     }
 
-    const onSaveTechTask = async () => {
-        setIsLoading(true);
-        setIsSuccessLoaded(false);
-        setIsError(false);
-        try {
-            let bodyFormData = new FormData();
-            bodyFormData.append('targetObjectId', selectedTargetObjectId);
-            bodyFormData.append('nameTechTask', nameTechTask);
-            bodyFormData.append('techTaskDoc', acceptedFiles[0]);
-            await AddTechTaskApi.addTechTask(bodyFormData);
-            setIsSuccessLoaded(true);
-        } catch {
-            setIsError(true);
-        } finally {
-            if (onAddTechTask) {
-                onAddTechTask();
-            }
-            setIsLoading(false);
-        }
+    const onSaveDocHandler = () => {
+        onSaveDoc(nameDoc, acceptedFiles[0]);
     }
 
     return (
@@ -119,11 +93,11 @@ export const AddTechTask = ({onAddTechTask}:AddTechTaskProps) => {
                 <Grid container direction={'column'} spacing={3}>
                     <Grid item>
                         <Typography variant="h6">
-                            Добавить ТЗ
+                            {`Добавить ${titleForm}`}
                         </Typography>
                     </Grid>
                     <Grid item>
-                        <TextField value={nameTechTask} onChange={onChangeNameTechTask} label="Название документа"/>
+                        <TextField value={nameDoc} onChange={onChangeNameTechTask} label="Название документа"/>
                     </Grid>
                     <Grid item>
                         <div {...getRootProps()} className={classes.dropZone}>
@@ -131,7 +105,7 @@ export const AddTechTask = ({onAddTechTask}:AddTechTaskProps) => {
                             {
                                 isDragActive ?
                                     <p>Перетащите файл сюда...</p> :
-                                    <p>Перетащите или выберите файл ТЗ в формате pdf</p>
+                                    <p>{`Перетащите или выберите файл ${titleForm} в формате pdf`}</p>
                             }
                         </div>
                         <aside>
@@ -141,7 +115,7 @@ export const AddTechTask = ({onAddTechTask}:AddTechTaskProps) => {
                     <Grid item container direction={"row-reverse"} spacing={3}>
                         <Grid item>
                             <Button
-                                onClick={onSaveTechTask}
+                                onClick={onSaveDocHandler}
                                 variant="contained"
                                 color="primary"
                                 startIcon={<SaveIcon/>}
@@ -163,5 +137,4 @@ export const AddTechTask = ({onAddTechTask}:AddTechTaskProps) => {
             </CardContent>
         </Card>
     )
-
 }

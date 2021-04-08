@@ -1,4 +1,4 @@
-import {axiosInstance} from "../../../../api/api";
+import {axiosInstance} from "../../../../../api/api";
 import {TechTask} from "../interfaces/TechTaskList.interface";
 
 export const TechTaskListApi = {

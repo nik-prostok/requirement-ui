@@ -10,6 +10,7 @@ export interface Mode {
 }
 
 export interface Pim {
+    nameDoc: string;
     namePiM: string;
     description: string;
     modes: Mode[];

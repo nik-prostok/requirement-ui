@@ -1,17 +1,13 @@
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import FormatListNumberedIcon from '@material-ui/icons/FormatListNumbered';
-import NoteAddIcon from '@material-ui/icons/NoteAdd';
+import AddToPhotosIcon from '@material-ui/icons/AddToPhotos';
 
 export const menuItems = [{
-    label: 'Техническое задание',
-    path: '/technicalTasks',
-    icon: AssignmentIcon,
+    label: 'Документы',
+    path: '/docs',
+    icon: AddToPhotosIcon,
 },{
     label: 'Пункты ТЗ',
     path: '/techPoints',
     icon: FormatListNumberedIcon,
-},/*{
-    label: 'Генерация акта',
-    path: '/generateAct',
-    icon: NoteAddIcon,
-}*/]
+}]

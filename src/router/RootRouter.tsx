@@ -6,7 +6,7 @@ import {
     Redirect,
 } from "react-router-dom";
 
-import {TechTasks} from "../components/TechTasks/TechTasks";
+import {Docs} from "../components/Docs/Docs";
 import {Header} from "../components/Header/Header";
 import {TechPoints} from "../components/TechPoints/TechPoints";
 import {GenerateAct} from "../components/GenerateAct/GenerateAct";
@@ -16,10 +16,10 @@ export const RootRouter = () => {
         <BrowserRouter>
             <Header>
                 <Switch>
-                    <Route path='/technicalTasks' component={TechTasks}/>
+                    <Route path='/docs' component={Docs}/>
                     <Route path='/techPoints' component={TechPoints}/>
                     <Route path='/generateAct' component={GenerateAct}/>
-                    <Redirect to={'/technicalTasks'}/>
+                    <Redirect to={'/docs'}/>
                 </Switch>
             </Header>
         </BrowserRouter>

@@ -1,4 +1,4 @@
-import {TechPoint} from "../../../TechPoints/interfaces/TechPoint";
+import {TechPoint} from "../../../../TechPoints/interfaces/TechPoint";
 
 export interface TechTask {
     titleTechTask: string;

@@ -1,4 +1,4 @@
-import {axiosInstance} from "../../../api/api";
+import {axiosInstance} from "../../../../../api/api";
 import {Pim, Pims} from "../interfaces/pims";
 
 export const PimsApi = {
