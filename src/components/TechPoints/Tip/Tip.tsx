@@ -14,7 +14,7 @@ import {
     Typography
 } from "@material-ui/core";
 import {useEffect, useState} from "react";
-import {Mode, Pim} from "../../Docs/PiMs/ListPiMs/interfaces/pims";
+import {Mode, Pim} from "../../Docs/PiMs/ListPiMs/interfaces/pims.interface";
 import {makeStyles} from "@material-ui/core/styles";
 import {useSelector} from "react-redux";
 import {RootState} from "../../../store/createStore";

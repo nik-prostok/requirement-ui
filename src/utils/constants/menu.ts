@@ -10,4 +10,8 @@ export const menuItems = [{
     label: 'Пункты ТЗ',
     path: '/techPoints',
     icon: FormatListNumberedIcon,
+},{
+    label: 'ПиМ',
+    path: '/pims',
+    icon: AssignmentIcon,
 }]

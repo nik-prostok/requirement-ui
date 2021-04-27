@@ -13,7 +13,7 @@ import {
     TableRow, Typography
 } from "@material-ui/core";
 import WarningIcon from "@material-ui/icons/Warning";
-import {Pim} from "./interfaces/pims";
+import {Pim} from "./interfaces/pims.interface";
 
 export interface TechTaskListProps {
     pimsList: Pim[];

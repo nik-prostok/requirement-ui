@@ -1,5 +1,5 @@
 import {axiosInstance} from "../../../../../api/api";
-import {Pim, Pims} from "../interfaces/pims";
+import {Pim, PimsInterface} from "../interfaces/pims.interface";
 
 export const PimsApi = {
     getPimsByObjectId(targetObjectId: string) {

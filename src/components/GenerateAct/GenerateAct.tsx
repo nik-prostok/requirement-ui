@@ -16,7 +16,7 @@ import WarningIcon from "@material-ui/icons/Warning";
 import DoneAllIcon from "@material-ui/icons/DoneAll";
 import {makeStyles} from "@material-ui/core/styles";
 
-import {Pim} from "../Docs/PiMs/ListPiMs/interfaces/pims";
+import {Pim} from "../Docs/PiMs/ListPiMs/interfaces/pims.interface";
 import {PimsApi} from "../Docs/PiMs/ListPiMs/api/getPims.api";
 import {useSelector} from "react-redux";
 import {RootState} from "../../store/createStore";

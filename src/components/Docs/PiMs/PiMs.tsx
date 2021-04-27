@@ -5,12 +5,10 @@ import {AddDocsApi} from "../AddDocs/api/AddDocsApi";
 import {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
 import {RootState} from "../../../store/createStore";
-import {TechTaskListApi} from "../TechTask/ListTechTask/api/TechTasksList.api";
-import {TechTask} from "../TechTask/ListTechTask/interfaces/TechTaskList.interface";
-import {TechTasksList} from "../TechTask/ListTechTask/TechTaskList";
+
 import {PimsList} from "./ListPiMs/PimsList";
 import {PimsApi} from "./ListPiMs/api/getPims.api";
-import {Pim} from "./ListPiMs/interfaces/pims";
+import {Pim} from "./ListPiMs/interfaces/pims.interface";
 
 export interface PiMsProps {
     onPiMsAdd?: () => void;

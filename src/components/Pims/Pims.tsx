@@ -29,13 +29,15 @@ import {
     Theme,
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
-import {Tip} from "./Tip/Tip";
-import {TechPoint} from "./interfaces/TechPoint";
 import {useSelector} from "react-redux";
 import {RootState} from "../../store/createStore";
-import {AddTechPointReq, TechPointApi} from "./api/TechPoint.api";
-import {TechTask} from "../Docs/TechTask/ListTechTask/interfaces/TechTaskList.interface";
 import {TechTaskListApi} from "../Docs/TechTask/ListTechTask/api/TechTasksList.api";
+import {AddTechPointReq, TechPointApi} from "../TechPoints/api/TechPoint.api";
+import {TechPoint} from "../TechPoints/interfaces/TechPoint";
+import {Mode, Pim} from "../Docs/PiMs/ListPiMs/interfaces/pims.interface";
+import {PimsApi} from "../Docs/PiMs/ListPiMs/api/getPims.api";
+import {Tip} from "./Tip/Tip";
+import {AddModeReq, PimsModeApi} from "./api/pims.api";
 
 setPdfWorker(PDFWorker);
 
@@ -55,18 +57,18 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 }));
 
-const techTaskURL = '/techTask/getPdfTechTask';
+const pimPdfURL = '/pims/getPdfPim';
 
-export const TechPoints = () => {
+export const Pims = () => {
 
     const classes = useStyles();
 
     const [docURL, setDocURL] = useState<string>();
 
-    const [selectedTechTask, setSelectedTechTask] = useState<TechTask>();
+    const [selectedPim, setSelectedPim] = useState<Pim>();
 
-    const [techTasksList, setTechTasksList] = useState<TechTask[]>([]);
-    const [techTaskPoints, setTechTaskPoints] = useState<TechPoint[]>([]);
+    const [pimList, setPimsList] = useState<Pim[]>([]);
+    const [modesPim, setModesPim] = useState<Mode[]>([]);
     const [selectedHighlight, setSelectedHighlight] = useState<number>();
 
     const {selectedTargetObjectId} = useSelector((state: RootState) => {
@@ -76,34 +78,34 @@ export const TechPoints = () => {
     })
 
     useEffect(() => {
-        if (selectedTechTask && selectedTechTask.techTaskPoints) {
-            const newTechPoints = selectedTechTask.techTaskPoints.map(techPoint => {
-                techPoint.position.rects = [techPoint.position.boundingRect]
-                return techPoint;
+        if (selectedPim && selectedPim.modes) {
+            const newTechPoints = selectedPim.modes.map(mode => {
+                mode.position.rects = [mode.position.boundingRect]
+                return mode;
             })
-            setTechTaskPoints(newTechPoints);
-            setDocURL(`${techTaskURL}?techTaskId=${selectedTechTask._id}`);
+            setModesPim(newTechPoints);
+            setDocURL(`${pimPdfURL}?pimId=${selectedPim._id}`);
         }
-    }, [selectedTechTask])
+    }, [selectedPim])
 
     useEffect(() => {
-        fetchTechTasksList();
+        fetchPimsList();
     }, [selectedTargetObjectId])
 
     useEffect(() => {
-        if (selectedTechTask && selectedTechTask._id){
-            const newTechTask = techTasksList.find(techTask => techTask._id === selectedTechTask._id);
-            if (newTechTask) setSelectedTechTask(newTechTask);
+        if (selectedPim && selectedPim._id) {
+            const newTechTask = pimList.find(techTask => techTask._id === selectedPim._id);
+            if (newTechTask) setSelectedPim(newTechTask);
         }
-    }, [techTasksList])
+    }, [pimList])
 
-    const addTechPoint = async (addTechPointReq: AddTechPointReq) => {
-        await TechPointApi.addTechPoint(addTechPointReq);
+    const addMode = async (addModeReq: AddModeReq) => {
+        await PimsModeApi.addMode(addModeReq);
     }
 
-    const fetchTechTasksList = async () => {
+    const fetchPimsList = async () => {
         if (selectedTargetObjectId) {
-            setTechTasksList(await TechTaskListApi.getTechTaskListByObjectId(selectedTargetObjectId));
+            setPimsList(await PimsApi.getPimsByObjectId(selectedTargetObjectId));
         }
     }
 
@@ -148,50 +150,49 @@ export const TechPoints = () => {
                                  transformSelection: any) => (
         <Tip
             selectedTargetObjectId={selectedTargetObjectId}
-            tipText={'Добавить пункт ТЗ'}
+            tipText={'Добавить режим'}
             onOpen={transformSelection}
-            onConfirm={async (name, selectedPim, selectedModeId) => {
+            onConfirm={async (nameMode) => {
                 console.log(positionSelection)
                 const position = {
                     pageNumber: positionSelection.pageNumber,
                     boundingRect: positionSelection.boundingRect
                 }
-                if (selectedTechTask && selectedTechTask._id) {
-                    await addTechPoint({
-                        description: content.text,
-                        modeId: selectedModeId,
-                        noPoint: name,
-                        position,
-                        techTaskId: selectedTechTask._id
-                    })
-                }
+                await addMode({
+                    description: content.text,
+                    modeNo: '123',
+                    modeName: 'Режим №1',
+                    position,
+                    // @ts-ignore
+                    pimId: selectedPim?._id
+                })
                 hideTipAndSelection();
-                await fetchTechTasksList();
+                await fetchPimsList();
             }}
         />
     )
 
     const onChangeTechTask = (event: React.ChangeEvent<{ value: unknown }>) => {
-        const newTechTask = techTasksList
+        const newTechTask = pimList
             .find(techTask => techTask._id === event.target.value as string)
-        setSelectedTechTask(newTechTask);
+        setSelectedPim(newTechTask);
     }
 
     const renderSelectTechTask = () => (
         <FormControl className={classes.formControl}>
-            <InputLabel>Техническое задание</InputLabel>
+            <InputLabel>ПиМ</InputLabel>
             <Select
-                placeholder={'Выберите ТЗ'}
+                placeholder={'Выберите документ ПиМ'}
                 disabled={!selectedTargetObjectId}
-                value={selectedTechTask ? selectedTechTask._id : null}
+                value={selectedPim ? selectedPim._id : null}
                 onChange={onChangeTechTask}
             >
-                {techTasksList && techTasksList.map(techTask =>
+                {pimList && pimList.map(pim =>
                     <MenuItem
-                        key={techTask._id}
-                        value={techTask._id}
+                        key={pim._id}
+                        value={pim._id}
                     >
-                        {techTask.titleTechTask}
+                        {pim.namePiM}
                     </MenuItem>)}
             </Select>
         </FormControl>
@@ -202,7 +203,7 @@ export const TechPoints = () => {
             {(pdfDocument: any) => (
                 <PdfHighlighter
                     pdfDocument={pdfDocument}
-                    highlights={techTaskPoints}
+                    highlights={modesPim}
                     onSelectionFinished={onSelectionFinished}
                     highlightTransform={highlightTransform}
                 />
@@ -210,25 +211,31 @@ export const TechPoints = () => {
         </PdfLoader>
     )
 
-    const renderTechPointsTable = () => {
+    const renderModesTable = () => {
         return (
             <TableContainer component={Paper}>
                 <Table>
                     <TableHead>
                         <TableRow>
                             <TableCell>
-                                <b>Название пункта ТЗ</b>
+                                <b>Номер режима</b>
                             </TableCell>
-                            <TableCell align="right"><b>Описание</b></TableCell>
+                            <TableCell>
+                                <b>Название режима</b>
+                            </TableCell>
+                            <TableCell align="right"><b>Содержание</b></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {techTaskPoints.map((techTask) => (
-                            <TableRow key={techTask._id}>
+                        {modesPim.map((mode) => (
+                            <TableRow key={mode._id}>
                                 <TableCell component="th" scope="row">
-                                    {techTask.noPoint}
+                                    {mode.modeNo}
                                 </TableCell>
-                                <TableCell align="right">{techTask.description}</TableCell>
+                                <TableCell align="right">{mode.modeName}</TableCell>
+                                <TableCell>
+                                    {mode.description}
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
@@ -255,10 +262,11 @@ export const TechPoints = () => {
                     </Grid>
                 </Grid>
                 <Grid item style={{paddingLeft: 0, paddingRight: 0}}>
-                    {!selectedTechTask && <Paper style={{height: '50px'}}>
-                        <h3 style={{margin: '30px'}}>Выберите объект и ТЗ, чтобы увидеть список пунктов</h3>
+                    {!selectedPim && <Paper style={{height: '50px'}}>
+                        <h3 style={{margin: '30px'}}>Выберите объект и ПиМ, чтобы увидеть список добавленных
+                            режимов</h3>
                     </Paper>}
-                    {selectedTechTask && renderTechPointsTable()}
+                    {selectedPim && renderModesTable()}
                 </Grid>
             </Grid>
         </Grid>
